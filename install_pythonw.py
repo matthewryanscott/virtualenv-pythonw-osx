@@ -55,6 +55,7 @@ def main(env_path, script_path):
     pythonw_dest = path.join(env_path, 'bin', 'pythonw')
     call([
         'cc',
+        '-arch', 'i386', '-arch', 'x86_64',
         '-DPYTHONWEXECUTABLE="' + pythonw_executable + '"',
         '-o',
         pythonw_dest,

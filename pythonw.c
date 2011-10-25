@@ -5,13 +5,20 @@
  * application bundle.
  */
 #include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
 #include <err.h>
 
 static char Python[] = PYTHONWEXECUTABLE;
 
 int main(int argc, char **argv) {
-	argv[0] = Python;
-	execv(Python, argv);
-	err(1, "execv: %s", Python);
-	/* NOTREACHED */
+     char **a;
+     a = malloc((argc + 2) * sizeof(char *));
+     memcpy(a + 2, argv, argc * sizeof(char *));
+     a[0] = "/usr/bin/arch";
+     a[1] = sizeof(char *) == 4 ? "-i386" : "-x86_64";
+     a[2] = Python;
+     execv("/usr/bin/arch", a);
+     err(1, "execv: %s", "arch");
+     /* NOTREACHED */
 }
