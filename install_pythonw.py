@@ -1,5 +1,22 @@
 #!/usr/bin/env python
 
+"""
+
+Some GUIs don't work right, unless the python is in an app bundle.
+
+This script only fixes virtualenvs based on Framework style installs (bundles)
+
+CF:
+
+https://github.com/pypa/virtualenv/issues/54
+http://stackoverflow.com/questions/3692928/why-doesnt-the-save-button-work-on-a-matplotlib-plot
+http://code.google.com/p/iterm2/issues/detail?id=1680
+
+This code attempts to fix this issue, by making sure both ``python`` and ``pythonw`` get
+compiled like app bundles.
+"""
+
+
 import os
 from os import path
 import shutil
@@ -8,9 +25,32 @@ import sys
 
 
 USAGE = """
-Usage: install_pythonw.py ENVPATH
+Usage: install_pythonw.py ROOT_OF_PARTICULAR_VIRTUALENV
+(if you are in the virtualenv right now, try:
+
+    $ which python
+
+for me: /Users/me/venvs/py27/bin/python
+
+    $ python install_pythonw.py /Users/me/venvs/py27/
+
+or
+
+    $ python install_pythonw.py `which python`/../..
+
+
 """
 
+BREW_NOTE = """
+
+if this virtualenv is based on the Python installation from Homebrew,
+you might want to install "Framework style".  This script only fixes
+virtualenvs based on OSX Framework-style installs.
+
+    $ brew install python --framework
+
+
+"""
 
 def main(env_path, script_path):
     # If Python.app already exists, exit.
@@ -32,6 +72,7 @@ def main(env_path, script_path):
     dot_python_src = os.readlink(dot_python)
     if not path.exists(dot_python_src):
         print dot_python_src, 'does not exist; exiting.'
+        print BREW_NOTE
         return 1
     # Find Python.app in PARDIR/Resources/
     python_app_src = path.join(
@@ -52,15 +93,18 @@ def main(env_path, script_path):
         pythonw_executable,
         ])
     # Compile pythonw to bin directory.
-    pythonw_dest = path.join(env_path, 'bin', 'pythonw')
-    call([
-        'cc',
-        '-arch', 'i386', '-arch', 'x86_64',
-        '-DPYTHONWEXECUTABLE="' + pythonw_executable + '"',
-        '-o',
-        pythonw_dest,
-        pythonw_c,
-        ])
+    for name in ['python','pythonw']:
+        pythonw_dest = path.join(env_path, 'bin', name)
+        call([
+            'cc',
+            '-arch', 'i386', '-arch', 'x86_64',
+            '-DPYTHONWEXECUTABLE="' + pythonw_executable + '"',
+            '-o',
+            pythonw_dest,
+            pythonw_c,
+            ])
+
+    print "finished!  App bundle created at:  " + python_app_dest
 
 
 if __name__ == '__main__':
