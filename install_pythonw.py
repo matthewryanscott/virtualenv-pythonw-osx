@@ -22,7 +22,10 @@ from os import path
 import shutil
 from subprocess import call
 import sys
+import struct
 
+PYTHON_ARCH = 8 * struct.calcsize("P")
+ARCHS = {32:'i386',64:'x86_64'}
 
 USAGE = """
 Usage: install_pythonw.py ROOT_OF_PARTICULAR_VIRTUALENV
@@ -97,7 +100,7 @@ def main(env_path, script_path):
         pythonw_dest = path.join(env_path, 'bin', name)
         call([
             'cc',
-            '-arch', 'i386', '-arch', 'x86_64',
+            '-arch', ARCHS[PYTHON_ARCH],
             '-DPYTHONWEXECUTABLE="' + pythonw_executable + '"',
             '-o',
             pythonw_dest,
