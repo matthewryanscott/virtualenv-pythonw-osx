@@ -55,7 +55,13 @@ virtualenvs based on OSX Framework-style installs.
 
 """
 
-def main(env_path, script_path):
+def main(argv):
+    if len(argv) != 2:
+        print USAGE
+        sys.exit(1)
+    env_path = path.abspath(argv[1])
+    script_path = path.abspath(path.dirname(__file__))
+
     # If Python.app already exists, exit.
     python_app_dest = path.join(env_path, 'Python.app')
     if path.exists(python_app_dest):
@@ -110,10 +116,9 @@ def main(env_path, script_path):
     print "finished!  App bundle created at:  " + python_app_dest
 
 
+def run_main():
+    sys.exit(main(sys.argv))
+
+
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        print USAGE
-        sys.exit(1)
-    env_path = path.abspath(sys.argv[1])
-    script_path = path.abspath(path.dirname(sys.argv[0]))
-    sys.exit(main(env_path, script_path))
+    run_main()
