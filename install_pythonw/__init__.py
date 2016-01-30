@@ -28,18 +28,18 @@ PYTHON_ARCH = 8 * struct.calcsize("P")
 ARCHS = {32:'i386',64:'x86_64'}
 
 USAGE = """
-Usage: install_pythonw.py ROOT_OF_PARTICULAR_VIRTUALENV
+Usage: fix-osx-virtualenv ROOT_OF_PARTICULAR_VIRTUALENV
 (if you are in the virtualenv right now, try:
 
     $ which python
 
 for me: /Users/me/venvs/py27/bin/python
 
-    $ python install_pythonw.py /Users/me/venvs/py27/
+    $ fix-osx-virtualenv /Users/me/venvs/py27/
 
 or
 
-    $ python install_pythonw.py `which python`/../..
+    $ fix-osx-virtualenv `which python`/../..
 
 
 """
