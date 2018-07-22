@@ -57,7 +57,7 @@ virtualenvs based on OSX Framework-style installs.
 
 def main(argv):
     if len(argv) != 2:
-        print USAGE
+        print(USAGE)
         sys.exit(1)
     env_path = path.abspath(argv[1])
     script_path = path.abspath(path.dirname(__file__))
@@ -65,29 +65,29 @@ def main(argv):
     # If Python.app already exists, exit.
     python_app_dest = path.join(env_path, 'Python.app')
     if path.exists(python_app_dest):
-        print python_app_dest, 'already exists; exiting.'
+        print(python_app_dest, 'already exists; exiting.')
         return 1
     # Find pythonw.c in script path.
     pythonw_c = path.join(script_path, 'pythonw.c')
     if not path.exists(pythonw_c):
-        print pythonw_c, 'does not exist; exiting.'
+        print(pythonw_c, 'does not exist; exiting.')
         return 1
     # Find .Python symlink.
     dot_python = path.join(env_path, '.Python')
     if not path.exists(dot_python):
-        print dot_python, 'does not exist; exiting.'
+        print(dot_python, 'does not exist; exiting.')
         return 1
     # Find symlink source.
     dot_python_src = os.readlink(dot_python)
     if not path.exists(dot_python_src):
-        print dot_python_src, 'does not exist; exiting.'
-        print BREW_NOTE
+        print(dot_python_src, 'does not exist; exiting.')
+        print(BREW_NOTE)
         return 1
     # Find Python.app in PARDIR/Resources/
     python_app_src = path.join(
         path.dirname(dot_python_src), 'Resources', 'Python.app')
     if not path.exists(python_app_src):
-        print python_app_src, 'does not exist; exiting.'
+        print(python_app_src, 'does not exist; exiting.')
         return 1
     # Copy Python.app to env_path
     shutil.copytree(python_app_src, python_app_dest)
@@ -113,7 +113,7 @@ def main(argv):
             pythonw_c,
             ])
 
-    print "finished!  App bundle created at:  " + python_app_dest
+    print("finished!  App bundle created at:  " + python_app_dest)
 
 
 def run_main():
